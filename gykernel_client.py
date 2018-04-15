@@ -1,30 +1,12 @@
-# Copyright 2016 Google Inc. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ==============================================================================
+# picked from issue #448
 
-#!/usr/bin/env python2.7
-
-from __future__ import print_function
-
-# This is a placeholder for a Google-internal import.
-
-from grpc.beta import implementations
 import tensorflow as tf
-
+from grpc.beta import implementations
 from tensorflow_serving.apis import predict_pb2
 from tensorflow_serving.apis import prediction_service_pb2
+import time 
 
+tf.enable_eager_execution()
 
 tf.app.flags.DEFINE_string('server', 'localhost:9000',
                            'PredictionService host:port')
@@ -32,21 +14,50 @@ tf.app.flags.DEFINE_string('image', '', 'path to image in JPEG format')
 FLAGS = tf.app.flags.FLAGS
 
 
-def main(_):
-  host, port = FLAGS.server.split(':')
-  channel = implementations.insecure_channel(host, int(port))
-  stub = prediction_service_pb2.beta_create_PredictionService_stub(channel)
-  # Send request
-  with open(FLAGS.image, 'rb') as f:
-    # See prediction_service.proto for gRPC request/response details.
-    data = f.read()
+def read_tensor_from_image_file(file_name,
+                                input_height=299,
+                                input_width=299,
+                                input_mean=0,
+                                input_std=255):
+    input_name = "file_reader"
+    file_reader = tf.read_file(file_name, input_name)
+    if file_name.endswith(".png"):
+        image_reader = tf.image.decode_png(
+            file_reader, channels=3, name="png_reader")
+    elif file_name.endswith(".gif"):
+        image_reader = tf.squeeze(
+            tf.image.decode_gif(file_reader, name="gif_reader"))
+    elif file_name.endswith(".bmp"):
+        image_reader = tf.image.decode_bmp(file_reader, name="bmp_reader")
+    else:
+        image_reader = tf.image.decode_jpeg(
+            file_reader, channels=3, name="jpeg_reader")
+    float_caster = tf.cast(image_reader, tf.float32)
+    dims_expander = tf.expand_dims(float_caster, 0)
+    resized = tf.image.resize_bilinear(
+        dims_expander, [input_height, input_width])
+    normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
+
+    return normalized
+
+
+def main(args):
+    host, port = FLAGS.server.split(':')
+    channel = implementations.insecure_channel(host, int(port))
+    stub = prediction_service_pb2.beta_create_PredictionService_stub(channel)
+    # Send requesti
+    image_time = time.time()
+    image = read_tensor_from_image_file(FLAGS.image)
+    print("time to read tensor from image file: {0}ms".format(int(round((time.time() - image_time) * 1000))))
     request = predict_pb2.PredictRequest()
     request.model_spec.name = 'inception'
-    request.model_spec.signature_name = 'serving_default'
-    request.inputs['image'].CopyFrom(tf.contrib.util.make_tensor_proto(data, shape=[1]))
-    result = stub.Predict(request, 10.0)  # 10 secs timeout
+    request.model_spec.signature_name = tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY
+    request.inputs['image'].CopyFrom(tf.contrib.util.make_tensor_proto(image))
+    request_time = time.time()
+    result = stub.Predict(request, 5.0)  # 10 secs timeout
+    print("request time: {0}ms".format(int(round((time.time() - image_time) * 1000))))
     print(result)
 
 
 if __name__ == '__main__':
-  tf.app.run()
+    tf.app.run()
