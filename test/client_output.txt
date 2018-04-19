@@ -1,0 +1,122 @@
+root@970c2fdff802:~# python gykernel/new_client.py --server=0.0.0.0:9000 --image=/root/flower_photos/roses/4804011140_7defedf4b7_m.jpg 
+outputs {
+  key: "classes"
+  value {
+    dtype: DT_STRING
+    tensor_shape {
+      dim {
+        size: 3
+      }
+    }
+    string_val: "tulips"
+    string_val: "roses"
+    string_val: "daisy"
+  }
+}
+outputs {
+  key: "prediction"
+  value {
+    dtype: DT_FLOAT
+    tensor_shape {
+      dim {
+        size: 1
+      }
+      dim {
+        size: 3
+      }
+    }
+    float_val: 0.308208465576
+    float_val: 0.613306760788
+    float_val: 0.0784848108888
+  }
+}
+model_spec {
+  name: "inception"
+  version {
+    value: 1
+  }
+  signature_name: "serving_default"
+}
+
+
+
+root@970c2fdff802:~# python gykernel/new_client.py --server=0.0.0.0:9000 --image=/root/flower_photos/tulips/4679869990_7c5f28f2fe_n.jpg 
+outputs {
+  key: "classes"
+  value {
+    dtype: DT_STRING
+    tensor_shape {
+      dim {
+        size: 3
+      }
+    }
+    string_val: "tulips"
+    string_val: "roses"
+    string_val: "daisy"
+  }
+}
+outputs {
+  key: "prediction"
+  value {
+    dtype: DT_FLOAT
+    tensor_shape {
+      dim {
+        size: 1
+      }
+      dim {
+        size: 3
+      }
+    }
+    float_val: 0.779537141323
+    float_val: 0.185868710279
+    float_val: 0.0345941409469
+  }
+}
+model_spec {
+  name: "inception"
+  version {
+    value: 1
+  }
+  signature_name: "serving_default"
+}
+
+
+root@970c2fdff802:~# python gykernel/new_client.py --server=0.0.0.0:9000 --image=/root/flower_photos/daisy/5809489674_5659b3ae5d_n.jpg 
+outputs {
+  key: "classes"
+  value {
+    dtype: DT_STRING
+    tensor_shape {
+      dim {
+        size: 3
+      }
+    }
+    string_val: "tulips"
+    string_val: "roses"
+    string_val: "daisy"
+  }
+}
+outputs {
+  key: "prediction"
+  value {
+    dtype: DT_FLOAT
+    tensor_shape {
+      dim {
+        size: 1
+      }
+      dim {
+        size: 3
+      }
+    }
+    float_val: 0.0316296964884
+    float_val: 0.00871185399592
+    float_val: 0.959658503532
+  }
+}
+model_spec {
+  name: "inception"
+  version {
+    value: 1
+  }
+  signature_name: "serving_default"
+}
