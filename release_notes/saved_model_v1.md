@@ -1,6 +1,6 @@
-## This file should contain the following notes 
+## Tomate dieseas classifier model  
 
-### parameters used 
+### Parameters used 
     learning rate: 0.01
     how many images: 1400
     test percentage: 10%
@@ -11,7 +11,7 @@
     test batcch size: -1
     any distortions: N/A
  
-### output classes 
+### Output classes 
     Corynespora 
     tetranychus 
     yelow leaf 
@@ -21,9 +21,9 @@
     xanthomonas 
     phytophthora 
 
-### final evaluation result 
+### Final evaluation result 
      
  
-### plot of confusion matrix 
+### Plot of confusion matrix 
 ![alt text](http://url/to/img.png)
 
