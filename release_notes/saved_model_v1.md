@@ -12,18 +12,26 @@
     any distortions: N/A
  
 ### Output classes 
-    Corynespora 
-    tetranychus 
-    yelow leaf 
-    health 
-    alternaria 
-    septoria 
-    xanthomonas 
-    phytophthora 
+    1) Corynespora 
+    2) tetranychus 
+    3) yelow leaf 
+    4) health 
+    5) alternaria 
+    6) septoria 
+    7) xanthomonas 
+    8) phytophthora 
 
 ### Final evaluation result 
      
  
 ### Plot of confusion matrix 
-!![alt text](https://github.com/BiondiVini/gykernel/tree/master/release_notes/IMG-20180418-WA0000.jpg)
-
+|      |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |
+| ---  |      ---      |      ---      |      ---     |    ---   |      ---     |     ---    |      ---      |       ---      |
+|**1** |     **0**     |       0       |       0      |     0    |       0      |      0     |       0       |        0       |
+|**2** |       0       |     **0**     |       0      |     0    |       0      |      0     |       0       |        0       |
+|**3** |       0       |       0       |     **0**    |     0    |       0      |      0     |       0       |        0       |
+|**4** |       0       |       0       |       0      |   **0**  |       0      |      0     |       0       |        0       |
+|**5** |       0       |       0       |       0      |     0    |     **0**    |      0     |       0       |        0       |
+|**6** |       0       |       0       |       0      |     0    |       0      |    **0**   |       0       |        0       |
+|**7** |       0       |       0       |       0      |     0    |       0      |      0     |     **0**     |        0       |
+|**8** |       0       |       0       |       0      |     0    |       0      |      0     |       0       |      **0**     |
