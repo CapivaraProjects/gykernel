@@ -25,5 +25,5 @@
      
  
 ### Plot of confusion matrix 
-![alt text](http://url/to/img.png)
+!![alt text](https://github.com/BiondiVini/gykernel/tree/master/release_notes/IMG-20180418-WA0000.jpg)
 
