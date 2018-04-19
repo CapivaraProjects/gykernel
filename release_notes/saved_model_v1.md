@@ -26,5 +26,5 @@
      
 ### Plot of confusion matrix  
 <p>
-  <img src="index.jpeg" width="400"/>
+  <img src="images/confusion_matrix_v1.jpeg" width="400"/>
 </p>
