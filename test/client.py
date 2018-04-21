@@ -41,6 +41,41 @@ def read_tensor_from_image_file(file_name,
     return normalized
 
 
+def get_response(result):
+    """
+        Return a dictionary object with code of status resonse and data
+        Options to code is 200 if all was Ok or 500 if exist a diferent 
+        number of predictions is different of the number of the classes
+        Dada contains either information about the model classifier and 
+        the prediction results or a error message.
+    """
+    final_result={}
+    prediction_result={}    
+    model_info={}
+
+    prediction = result.outputs['prediction'].float_val
+    classes = result.outputs['classes'].string_val
+
+    output_length = len(classes) if (len(classes)==len(prediction)) else -1
+
+    if (output_length != -1):
+
+        for i in range(output_length):
+            prediction_result[classes[i]] = prediction[i]	
+
+        model_info['name']=str(result.model_spec.name)
+        model_info['version']=int(result.model_spec.version.value)
+        final_result['code']=200
+        final_result['data']={'prediction_result':prediction_result,
+                              'model_info':model_info}
+    else:
+        final_result['code']=500
+        final_result['data']={'error_message':'output length of classes and predictions are differents'}
+
+    return final_result
+
+
+
 def main(args):
     host, port = FLAGS.server.split(':')
     channel = implementations.insecure_channel(host, int(port))
@@ -54,10 +89,10 @@ def main(args):
     request.model_spec.signature_name = tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY
     request.inputs['image'].CopyFrom(tf.contrib.util.make_tensor_proto(image))
     request_time = time.time()
-    result = stub.Predict(request, 5.0)  # 10 secs timeout
+    result = stub.Predict(request, 10.0)  # 10 secs timeout
     print("request time: {0}ms".format(int(round((time.time() - image_time) * 1000))))
+    response = get_response(result)
     print(result)
-
 
 if __name__ == '__main__':
     tf.app.run()
