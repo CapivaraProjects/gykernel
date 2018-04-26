@@ -1,4 +1,6 @@
-# picked from issue #448
+# picked from issue #448 of tensorflow serving repository
+# Script to test the tensorflow serving service
+
 
 import tensorflow as tf
 from grpc.beta import implementations
