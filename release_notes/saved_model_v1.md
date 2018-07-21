@@ -1,4 +1,4 @@
-## Tomate dieseas classifier model  
+## Tomato diseases classifier model  
 
 ### Parameters used   
     learning rate: 0.01  
